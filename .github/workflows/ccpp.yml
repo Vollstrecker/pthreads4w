@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   windows:
-    name: Build (${{ matrix.os }})
+    name: Build (${{ matrix.os }} - ${{ matrix.type }})
     runs-on: ${{ matrix.os }}
 
     strategy:
