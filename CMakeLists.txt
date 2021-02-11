@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.11)
 
-project (PTHREADS4W VERSION 3)
+project (PTHREADS4W VERSION 3.0.2.0)
 include (GNUInstallDirs)
 set (CMAKE_DEBUG_POSTFIX d)
 
@@ -196,7 +196,7 @@ target_include_directories (pthreadVC
 )
 
 set_target_properties (pthreadVC PROPERTIES
-	OUTPUT_NAME pthread
+	OUTPUT_NAME pthreadVC${PTHREADS4W_VERSION_MAJOR}
 	EXPORT_NAME Threads::Threads
 	VERSION ${PTHREADS4W_VERSION}
 	SOVERSION ${PTHREADS4W_VERSION_MAJOR}
@@ -230,7 +230,7 @@ target_include_directories (pthreadVCS
 )
 
 set_target_properties (pthreadVCS PROPERTIES
-	OUTPUT_NAME pthreads
+	OUTPUT_NAME pthreadVC${PTHREADS4W_VERSION_MAJOR}s
 	EXPORT_NAME Threads::Static
 	VERSION ${PTHREADS4W_VERSION}
 	SOVERSION ${PTHREADS4W_VERSION_MAJOR}
