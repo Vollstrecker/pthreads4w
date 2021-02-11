@@ -1,0 +1,792 @@
+FUNCTION (PT4WCREATE_TEST TESTNAME)
+	SET (OPTS NEEDS_LINK NEEDS_ROOT_INCL)
+	SET (OVA ADDITIONAL_SOURCE ADITIONAL_LIB)
+	SET (MVA DEPENDS)
+
+	CMAKE_PARSE_ARGUMENTS (PARSE_ARGV 1 PT4WCT "${OPTS}" "${OVA}" "${MVA}")
+
+	ADD_EXECUTABLE (test-pthread4w-${TESTNAME}
+		${TESTNAME}.c
+		${PT4WCT_ADDITIONAL_SOURCE}
+	)
+
+	IF (PT4WCT_NEEDS_ROOT_INCL)
+		TARGET_INCLUDE_DIRECTORIES (test-pthread4w-${TESTNAME}
+			PRIVATE ${PROJECT_SOURCE_DIR}
+		)
+	ENDIF (PT4WCT_NEEDS_ROOT_INCL)
+
+	ADD_TEST (NAME test-pthread4w-${TESTNAME}
+		COMMAND test-pthread4w-${TESTNAME}
+	)
+
+	SET_TESTS_PROPERTIES (test-pthread4w-${TESTNAME} PROPERTIES
+		FIXTURES_SETUP ${TESTNAME}
+	)
+
+	IF (PT4WCT_DEPENDS)
+		SET_TESTS_PROPERTIES (test-pthread4w-${TESTNAME} PROPERTIES
+			FIXTURES_REQUIRED "${PT4WCT_DEPENDS}"
+		)
+	ENDIF (PT4WCT_DEPENDS)
+
+	IF (PT4WCT_NEEDS_LINK)
+		ADD_EXECUTABLE (test-pthread4w-${TESTNAME}-static
+			${TESTNAME}.c
+			${PT4WCT_ADDITIONAL_SOURCE}
+		)
+
+		ADD_TEST (NAME test-pthread4w-${TESTNAME}-static
+			COMMAND test-pthread4w-${TESTNAME}-static
+		)
+
+		IF (PT4WCT_NEEDS_ROOT_INCL)
+			TARGET_INCLUDE_DIRECTORIES (test-pthread4w-${TESTNAME}-static
+				PRIVATE ${PROJECT_SOURCE_DIR}
+			)
+		ENDIF (PT4WCT_NEEDS_ROOT_INCL)
+
+		TARGET_LINK_LIBRARIES (test-pthread4w-${TESTNAME}
+			PRIVATE Threads::Threads
+			PRIVATE ${PT4WCT_ADITIONAL_LIB}
+		)
+
+		TARGET_LINK_LIBRARIES (test-pthread4w-${TESTNAME}-static
+			PRIVATE Threads::Static
+			PRIVATE ${PT4WCT_ADITIONAL_LIB}
+		)
+
+		SET_TESTS_PROPERTIES (test-pthread4w-${TESTNAME} PROPERTIES
+			ENVIRONMENT "PATH=$<TARGET_FILE_DIR:Threads::Threads>\;%PATH%"
+		)
+
+		SET_TESTS_PROPERTIES (test-pthread4w-${TESTNAME}-static PROPERTIES
+			FIXTURES_SETUP ${TESTNAME}-static
+		)
+
+		IF (PT4WCT_DEPENDS)
+			SET_TESTS_PROPERTIES (test-pthread4w-${TESTNAME}-static PROPERTIES
+				FIXTURES_REQUIRED "${PT4WCT_DEPENDS}-static"
+			)
+		ENDIF (PT4WCT_DEPENDS)
+	ENDIF (PT4WCT_NEEDS_LINK)
+ENDFUNCTION (PT4WCREATE_TEST)
+
+PT4WCREATE_TEST (affinity1 NEEDS_LINK)
+PT4WCREATE_TEST (affinity2 NEEDS_LINK)
+
+PT4WCREATE_TEST (affinity3
+	NEEDS_LINK
+	DEPENDS self1
+)
+
+PT4WCREATE_TEST (affinity4
+	NEEDS_LINK
+	DEPENDS self1)
+
+PT4WCREATE_TEST (affinity5
+	NEEDS_LINK
+	DEPENDS join0 self1
+)
+
+PT4WCREATE_TEST (affinity6
+	NEEDS_LINK
+	DEPENDS join0 self1
+)
+
+PT4WCREATE_TEST (barrier1 NEEDS_LINK)
+
+PT4WCREATE_TEST (barrier2
+	NEEDS_LINK
+	DEPENDS barrier1
+)
+
+PT4WCREATE_TEST (barrier3
+	NEEDS_LINK
+	DEPENDS barrier1 join0
+)
+
+PT4WCREATE_TEST (barrier4
+	NEEDS_LINK
+	DEPENDS barrier1 join0 mutex1
+)
+
+PT4WCREATE_TEST (barrier5
+	NEEDS_LINK
+	DEPENDS barrier1 join0
+)
+
+PT4WCREATE_TEST (barrier6
+	NEEDS_LINK
+	DEPENDS barrier1 join0 mutex1
+)
+
+PT4WCREATE_TEST (benchtest1
+	NEEDS_LINK
+	ADDITIONAL_SOURCE benchlib.c
+	DEPENDS mutex5
+)
+
+PT4WCREATE_TEST (benchtest2
+	NEEDS_LINK
+	ADDITIONAL_SOURCE benchlib.c
+	DEPENDS join0 mutex5
+)
+
+PT4WCREATE_TEST (benchtest3
+	NEEDS_LINK
+	ADDITIONAL_SOURCE benchlib.c
+	DEPENDS join0 mutex3 mutex5
+)
+
+PT4WCREATE_TEST (benchtest4
+	NEEDS_LINK
+	ADDITIONAL_SOURCE benchlib.c
+	DEPENDS mutex3 mutex5
+)
+
+PT4WCREATE_TEST (benchtest5
+	NEEDS_LINK
+	DEPENDS semaphore5
+)
+
+PT4WCREATE_TEST (cancel1
+	NEEDS_LINK
+	DEPENDS create1 self1
+)
+
+PT4WCREATE_TEST (cancel3
+	NEEDS_LINK
+	DEPENDS cancel1 join0  mutex1
+)#- quserex.dll and alertdrv.sys are not available.
+
+PT4WCREATE_TEST (cancel4
+	NEEDS_LINK
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cancel5
+	NEEDS_LINK
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cancel6a
+	NEEDS_LINK
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cancel6d
+	NEEDS_LINK
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cancel7
+	NEEDS_LINK
+	DEPENDS cancel3 kill1
+)
+
+PT4WCREATE_TEST (cancel8
+	NEEDS_LINK
+	DEPENDS cleanup0 condvar4 kill1
+)
+
+PT4WCREATE_TEST (cancel9
+	NEEDS_LINK
+	ADITIONAL_LIB ws2_32
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cleanup0
+	NEEDS_LINK
+	DEPENDS cancel3
+)
+
+PT4WCREATE_TEST (cleanup1
+	NEEDS_LINK
+	DEPENDS cleanup0
+)
+
+PT4WCREATE_TEST (cleanup2
+	NEEDS_LINK
+	DEPENDS cleanup0
+)
+
+PT4WCREATE_TEST (cleanup3
+	NEEDS_LINK
+	DEPENDS cleanup0
+)
+
+PT4WCREATE_TEST (condvar1 NEEDS_LINK)
+
+PT4WCREATE_TEST (condvar1_1
+	NEEDS_LINK
+	DEPENDS condvar1
+)
+
+PT4WCREATE_TEST (condvar1_2
+	NEEDS_LINK
+	DEPENDS condvar1 join0
+)
+
+PT4WCREATE_TEST (condvar2
+	NEEDS_LINK
+	DEPENDS condvar1 mutex1
+)
+
+PT4WCREATE_TEST (condvar2_1
+	NEEDS_LINK
+	DEPENDS condvar2 join0
+)
+
+PT4WCREATE_TEST (condvar3
+	NEEDS_LINK
+	DEPENDS condvar2 join0 self1
+)
+
+PT4WCREATE_TEST (condvar3_1
+	NEEDS_LINK
+	DEPENDS condvar3
+)
+
+PT4WCREATE_TEST (condvar3_2
+	NEEDS_LINK
+	DEPENDS condvar5
+)
+
+PT4WCREATE_TEST (condvar3_3
+	NEEDS_LINK
+	DEPENDS condvar3
+)
+
+PT4WCREATE_TEST (condvar4
+	NEEDS_LINK
+	DEPENDS condvar3
+)
+
+PT4WCREATE_TEST (condvar5
+	NEEDS_LINK
+	DEPENDS condvar4
+)
+
+PT4WCREATE_TEST (condvar6
+	NEEDS_LINK
+	DEPENDS condvar5
+)
+
+PT4WCREATE_TEST (condvar7
+	NEEDS_LINK
+	DEPENDS condvar5
+)
+
+PT4WCREATE_TEST (condvar8
+	NEEDS_LINK
+	DEPENDS condvar5
+)
+
+PT4WCREATE_TEST (condvar9
+	NEEDS_LINK
+	DEPENDS condvar5
+)
+
+PT4WCREATE_TEST (context1
+	NEEDS_LINK
+	DEPENDS create1 exit1
+)
+
+PT4WCREATE_TEST (count1
+	NEEDS_LINK
+	DEPENDS join0 mutex1
+)
+
+PT4WCREATE_TEST (create1 NEEDS_LINK)
+
+PT4WCREATE_TEST (create2
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (create3
+	NEEDS_LINK
+	DEPENDS create2
+)
+
+PT4WCREATE_TEST (delay1 NEEDS_LINK)
+
+PT4WCREATE_TEST (delay2
+	NEEDS_LINK
+	DEPENDS cleanup0 delay1
+)
+
+PT4WCREATE_TEST (detach1
+	NEEDS_LINK
+	DEPENDS create1 exit1 kill1
+)
+
+PT4WCREATE_TEST (equal0
+	NEEDS_LINK
+	DEPENDS self1
+)
+
+PT4WCREATE_TEST (equal1
+	NEEDS_LINK
+	DEPENDS create1 equal0
+)
+
+PT4WCREATE_TEST (errno0
+	NEEDS_LINK
+	DEPENDS semaphore5
+)
+
+PT4WCREATE_TEST (errno1
+	NEEDS_LINK
+	DEPENDS create1 mutex1 self1
+)
+
+PT4WCREATE_TEST (exception1
+	NEEDS_LINK
+	DEPENDS cancel3 self1
+)
+
+PT4WCREATE_TEST (exception2
+	NEEDS_LINK
+	DEPENDS exception1
+)
+
+PT4WCREATE_TEST (exception3
+	NEEDS_ROOT_INCL
+	DEPENDS exception1 exit1 mutex5
+)
+
+PT4WCREATE_TEST (exception3_0
+	NEEDS_ROOT_INCL
+	DEPENDS exception3
+)
+
+PT4WCREATE_TEST (exit1 NEEDS_LINK)
+
+PT4WCREATE_TEST (exit2
+	NEEDS_LINK
+	DEPENDS create1 exit1
+)
+
+PT4WCREATE_TEST (exit3
+	NEEDS_LINK
+	DEPENDS create1 exit1
+)
+
+PT4WCREATE_TEST (exit4
+	NEEDS_LINK
+	DEPENDS cancel3 exit1
+)
+
+PT4WCREATE_TEST (exit5
+	NEEDS_LINK
+	DEPENDS cancel3 exit1 kill1
+)
+
+PT4WCREATE_TEST (exit6 NEEDS_LINK)
+
+PT4WCREATE_TEST (eyal1
+	NEEDS_LINK
+	DEPENDS join0 mutex3
+)
+
+PT4WCREATE_TEST (inherit1
+	NEEDS_LINK
+	DEPENDS join0 priority1
+)
+
+PT4WCREATE_TEST (join0
+	NEEDS_LINK
+	DEPENDS create1 exit1
+)
+
+PT4WCREATE_TEST (join1
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (join2
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (join3
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (join4
+	NEEDS_LINK
+	DEPENDS create1
+)
+
+PT4WCREATE_TEST (kill1 
+	NEEDS_LINK
+	DEPENDS self1
+)
+
+PT4WCREATE_TEST (mutex1 NEEDS_LINK)
+
+PT4WCREATE_TEST (mutex1e
+	NEEDS_LINK
+	DEPENDS mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex1n
+	NEEDS_LINK
+	DEPENDS mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex1r
+	NEEDS_LINK
+	DEPENDS mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex2
+	NEEDS_LINK
+	DEPENDS mutex1
+)
+
+PT4WCREATE_TEST (mutex2e
+	NEEDS_LINK
+	DEPENDS mutex1
+)
+
+PT4WCREATE_TEST (mutex2r
+	NEEDS_LINK
+	DEPENDS mutex1
+)
+
+PT4WCREATE_TEST (mutex3
+	NEEDS_LINK
+	DEPENDS join0 mutex1
+)
+
+PT4WCREATE_TEST (mutex3e
+	NEEDS_LINK
+	DEPENDS join0 mutex3
+)
+
+PT4WCREATE_TEST (mutex3r
+	NEEDS_LINK
+	DEPENDS join0 mutex3
+)
+
+PT4WCREATE_TEST (mutex4
+	NEEDS_LINK
+	DEPENDS join0 mutex3 mutex5
+)
+
+PT4WCREATE_TEST (mutex5 NEEDS_LINK)
+
+PT4WCREATE_TEST (mutex6
+	NEEDS_LINK
+	DEPENDS create1 mutex3
+)
+
+PT4WCREATE_TEST (mutex6e
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex6es
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex6n
+	NEEDS_LINK
+	DEPENDS create1 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex6r
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex6rs
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (mutex6s
+	NEEDS_LINK
+	DEPENDS create3
+)
+
+PT4WCREATE_TEST (mutex7
+	NEEDS_LINK
+	DEPENDS create1 mutex3
+)
+
+PT4WCREATE_TEST (mutex7e
+	NEEDS_LINK
+	DEPENDS join0 mutex3 mutex5
+)
+
+PT4WCREATE_TEST (mutex7n
+	NEEDS_LINK
+	DEPENDS create1 mutex3 mutex5
+)
+
+PT4WCREATE_TEST (mutex7r
+	NEEDS_LINK
+	DEPENDS join0 mutex3 mutex5
+)
+
+PT4WCREATE_TEST (mutex8
+	NEEDS_LINK
+	DEPENDS create1 mutex1
+)
+
+PT4WCREATE_TEST (mutex8e
+	NEEDS_LINK
+	DEPENDS create1 mutex5 mutex8
+)
+
+PT4WCREATE_TEST (mutex8n
+	NEEDS_LINK
+	DEPENDS create1 mutex5 mutex8
+)
+
+PT4WCREATE_TEST (mutex8r
+	NEEDS_LINK
+	DEPENDS create1 mutex5 mutex8
+)
+
+PT4WCREATE_TEST (name_np1
+	NEEDS_LINK
+	DEPENDS barrier1 join0 self1
+)
+
+PT4WCREATE_TEST (name_np2
+	NEEDS_LINK
+	DEPENDS name_np1
+)
+
+PT4WCREATE_TEST (once1
+	NEEDS_LINK
+	DEPENDS create1
+)
+
+PT4WCREATE_TEST (once2
+	NEEDS_LINK
+	DEPENDS join0 once1
+)
+
+PT4WCREATE_TEST (once3
+	NEEDS_LINK
+	DEPENDS cancel3 once1 self1
+)
+
+PT4WCREATE_TEST (once4
+	NEEDS_LINK
+	DEPENDS cleanup0 once1 priority1
+)
+
+PT4WCREATE_TEST (priority1
+	NEEDS_LINK
+	DEPENDS join0 self1
+)
+
+PT4WCREATE_TEST (priority2
+	NEEDS_LINK
+	DEPENDS barrier1 inherit1 join0
+)
+
+PT4WCREATE_TEST (reinit1
+	NEEDS_LINK
+	DEPENDS join0 rwlock3 sequence1
+)
+
+PT4WCREATE_TEST (reuse1
+	NEEDS_LINK
+	DEPENDS equal0 join0
+)
+
+PT4WCREATE_TEST (reuse2
+	NEEDS_LINK
+	DEPENDS create2
+)
+
+PT4WCREATE_TEST (robust1
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (robust2
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (robust3
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (robust4
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (robust5
+	NEEDS_LINK
+	DEPENDS join0 mutex1 mutex5
+)
+
+PT4WCREATE_TEST (rwlock1 NEEDS_LINK)
+
+PT4WCREATE_TEST (rwlock2
+	NEEDS_LINK
+	DEPENDS rwlock1
+)
+
+PT4WCREATE_TEST (rwlock2_t
+	NEEDS_LINK
+	DEPENDS rwlock2
+)
+
+PT4WCREATE_TEST (rwlock3
+	NEEDS_LINK
+	DEPENDS join0 rwlock2
+)
+
+PT4WCREATE_TEST (rwlock3_t
+	NEEDS_LINK
+	DEPENDS create1 rwlock2
+)
+
+PT4WCREATE_TEST (rwlock4
+	NEEDS_LINK
+	DEPENDS join0 rwlock2
+)
+
+PT4WCREATE_TEST (rwlock4_t
+	NEEDS_LINK
+	DEPENDS create1 rwlock2_t
+)
+
+PT4WCREATE_TEST (rwlock5
+	NEEDS_LINK
+	DEPENDS join0 rwlock2
+)
+
+PT4WCREATE_TEST (rwlock5_t
+	NEEDS_LINK
+	DEPENDS create1 rwlock2_t
+)
+
+PT4WCREATE_TEST (rwlock6
+	NEEDS_LINK
+	DEPENDS join0 rwlock3
+)
+
+PT4WCREATE_TEST (rwlock6_t
+	NEEDS_LINK
+	DEPENDS join0 rwlock2_t rwlock3
+)
+
+PT4WCREATE_TEST (rwlock6_t2
+	NEEDS_LINK
+	DEPENDS join0 rwlock2_t rwlock3_t
+)
+
+PT4WCREATE_TEST (self1
+	NEEDS_LINK
+	DEPENDS exit6
+)
+
+PT4WCREATE_TEST (self2
+	NEEDS_LINK
+	DEPENDS create1 equal0 exit6 self1
+)
+
+PT4WCREATE_TEST (semaphore1
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (semaphore2 NEEDS_LINK)
+
+PT4WCREATE_TEST (semaphore3
+	NEEDS_LINK
+	DEPENDS join0 semaphore2
+)
+
+PT4WCREATE_TEST (semaphore4
+	NEEDS_LINK
+	DEPENDS cancel3 semaphore2
+)
+
+PT4WCREATE_TEST (semaphore4t
+	NEEDS_LINK
+	DEPENDS cancel4 semaphore2
+)
+
+PT4WCREATE_TEST (semaphore5
+	NEEDS_LINK
+	DEPENDS join0
+)
+
+PT4WCREATE_TEST (sequence1
+	NEEDS_LINK
+	DEPENDS create2 self1
+)
+
+PT4WCREATE_TEST (sizes
+	NEEDS_ROOT_INCL
+	DEPENDS once1
+)
+
+PT4WCREATE_TEST (spin1 NEEDS_LINK)
+
+PT4WCREATE_TEST (spin2
+	NEEDS_LINK
+	DEPENDS join0 spin1
+)
+
+PT4WCREATE_TEST (spin3
+	NEEDS_LINK
+	DEPENDS join0 spin1
+)
+
+PT4WCREATE_TEST (spin4
+	NEEDS_LINK
+	DEPENDS join0 spin1
+)
+
+PT4WCREATE_TEST (stress1
+	NEEDS_LINK
+	DEPENDS barrier1 condvar4
+)
+
+PT4WCREATE_TEST (timeouts
+	NEEDS_LINK
+	DEPENDS condvar2 mutex5
+)
+
+PT4WCREATE_TEST (tsd1
+	NEEDS_LINK
+	DEPENDS barrier1 exit6 join0 once1 self1
+)
+
+PT4WCREATE_TEST (tsd2
+	NEEDS_LINK
+	DEPENDS barrier1 exit6 join0 once1 self1
+)
+
+PT4WCREATE_TEST (tsd3
+	NEEDS_LINK
+	DEPENDS barrier1 exit6 join0 once1 self1
+)
+
+PT4WCREATE_TEST (valid1
+	NEEDS_LINK
+	DEPENDS join0 kill1
+)
+
+PT4WCREATE_TEST (valid2
+	NEEDS_LINK
+	DEPENDS kill1
+)

@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+INCLUDE (${CMAKE_CURRENT_LIST_DIR}/PTHREADS4W.cmake)
+INCLUDE (CMakeFindDependencyMacro)
+ADD_LIBRARY (Threads::Shared ALIAS Threads::Threads)
