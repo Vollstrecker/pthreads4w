@@ -1,76 +1,90 @@
-FUNCTION (PT4WCREATE_TEST TESTNAME)
-	SET (OPTS NEEDS_LINK NEEDS_ROOT_INCL)
-	SET (OVA ADDITIONAL_SOURCE ADITIONAL_LIB)
-	SET (MVA DEPENDS)
+function (PT4WCREATE_TEST TESTNAME)
+	set (OPTS NEEDS_LINK NEEDS_ROOT_INCL)
+	set (OVA ADDITIONAL_SOURCE ADITIONAL_LIB)
+	set (MVA DEPENDS)
 
-	CMAKE_PARSE_ARGUMENTS (PARSE_ARGV 1 PT4WCT "${OPTS}" "${OVA}" "${MVA}")
+	cmake_parse_arguments (PARSE_ARGV 1 PT4WCT "${OPTS}" "${OVA}" "${MVA}")
 
-	ADD_EXECUTABLE (test-pthread4wVC-${TESTNAME}
-		${TESTNAME}.c
-		${PT4WCT_ADDITIONAL_SOURCE}
-	)
-
-	IF (PT4WCT_NEEDS_ROOT_INCL)
-		TARGET_INCLUDE_DIRECTORIES (test-pthread4wVC-${TESTNAME}
-			PRIVATE ${PROJECT_SOURCE_DIR}
-		)
-	ENDIF (PT4WCT_NEEDS_ROOT_INCL)
-
-	ADD_TEST (NAME test-pthread4wVC-${TESTNAME}
-		COMMAND test-pthread4wVC-${TESTNAME}
-	)
-
-	SET_TESTS_PROPERTIES (test-pthread4wVC-${TESTNAME} PROPERTIES
-		FIXTURES_SETUP ${TESTNAME}VC
-	)
-
-	IF (PT4WCT_DEPENDS)
-		SET_TESTS_PROPERTIES (test-pthread4wVC-${TESTNAME} PROPERTIES
-			FIXTURES_REQUIRED "${PT4WCT_DEPENDS}VC"
-		)
-	ENDIF (PT4WCT_DEPENDS)
-
-	IF (PT4WCT_NEEDS_LINK)
-		ADD_EXECUTABLE (test-pthread4wVC-${TESTNAME}-static
+	foreach (SUFFIX ${SUFFIXES})
+		add_executable (test-pthread4wV${SUFFIX}-${TESTNAME}
 			${TESTNAME}.c
 			${PT4WCT_ADDITIONAL_SOURCE}
 		)
 
-		ADD_TEST (NAME test-pthread4wVC-${TESTNAME}-static
-			COMMAND test-pthread4wVC-${TESTNAME}-static
-		)
-
-		IF (PT4WCT_NEEDS_ROOT_INCL)
-			TARGET_INCLUDE_DIRECTORIES (test-pthread4wVC-${TESTNAME}-static
+		if (PT4WCT_NEEDS_ROOT_INCL)
+			target_include_directories (test-pthread4wV${SUFFIX}-${TESTNAME}
 				PRIVATE ${PROJECT_SOURCE_DIR}
 			)
-		ENDIF (PT4WCT_NEEDS_ROOT_INCL)
+		endif()
 
-		TARGET_LINK_LIBRARIES (test-pthread4wVC-${TESTNAME}
-			PRIVATE pthreadVCS
-			PRIVATE ${PT4WCT_ADITIONAL_LIB}
+		add_test (NAME test-pthread4wV${SUFFIX}-${TESTNAME}
+			COMMAND test-pthread4wV${SUFFIX}-${TESTNAME}
 		)
 
-		TARGET_LINK_LIBRARIES (test-pthread4wVC-${TESTNAME}-static
-			PRIVATE pthreadVCS
-			PRIVATE ${PT4WCT_ADITIONAL_LIB}
+		set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+			FIXTURES_SETUP ${TESTNAME}V${SUFFIX}
 		)
 
-		SET_TESTS_PROPERTIES (test-pthread4wVC-${TESTNAME} PROPERTIES
-			ENVIRONMENT "PATH=$<TARGET_FILE_DIR:Threads::Threads>\;%PATH%"
-		)
-
-		SET_TESTS_PROPERTIES (test-pthread4wVC-${TESTNAME}-static PROPERTIES
-			FIXTURES_SETUP ${TESTNAME}VC-static
-		)
-
-		IF (PT4WCT_DEPENDS)
-			SET_TESTS_PROPERTIES (test-pthread4wVC-${TESTNAME}-static PROPERTIES
-				FIXTURES_REQUIRED "${PT4WCT_DEPENDS}VC-static"
+		if (PT4WCT_DEPENDS)
+			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+				FIXTURES_REQUIRED "${PT4WCT_DEPENDS}V${SUFFIX}"
 			)
-		ENDIF (PT4WCT_DEPENDS)
-	ENDIF (PT4WCT_NEEDS_LINK)
-ENDFUNCTION (PT4WCREATE_TEST)
+		endif()
+
+		if (PT4WCT_NEEDS_LINK)
+			add_executable (test-pthread4wV${SUFFIX}-${TESTNAME}-static
+				${TESTNAME}.c
+				${PT4WCT_ADDITIONAL_SOURCE}
+			)
+
+			add_test (NAME test-pthread4wV${SUFFIX}-${TESTNAME}-static
+				COMMAND test-pthread4wV${SUFFIX}-${TESTNAME}-static
+			)
+
+			if (PT4WCT_NEEDS_ROOT_INCL)
+				target_include_directories (test-pthread4wV${SUFFIX}-${TESTNAME}-static
+					PRIVATE ${PROJECT_SOURCE_DIR}
+				)
+			endif()
+
+			target_link_libraries (test-pthread4wV${SUFFIX}-${TESTNAME}
+				PRIVATE pthreadV${SUFFIX}
+				PRIVATE ${PT4WCT_ADITIONAL_LIB}
+			)
+
+			target_link_libraries (test-pthread4wV${SUFFIX}-${TESTNAME}-static
+				PRIVATE pthreadV${SUFFIX}S
+				PRIVATE ${PT4WCT_ADITIONAL_LIB}
+			)
+
+			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+				ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthreadV${SUFFIX}>\;%PATH%"
+			)
+
+			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME}-static PROPERTIES
+				FIXTURES_SETUP ${TESTNAME}V${SUFFIX}-static
+			)
+
+			if (PT4WCT_DEPENDS)
+				set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME}-static PROPERTIES
+					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}V${SUFFIX}-static"
+				)
+			endif()
+		endif()
+	endforeach()
+endfunction()
+
+if (BUILD_C)
+	list (APPEND SUFFIXES "C")
+endif()
+
+if (BUILD_CE)
+	list (APPEND SUFFIXES "CE")
+endif()
+
+if (BUILD_SE)
+	list (APPEND SUFFIXES "SE")
+endif()
 
 PT4WCREATE_TEST (affinity1 NEEDS_LINK)
 PT4WCREATE_TEST (affinity2 NEEDS_LINK)
