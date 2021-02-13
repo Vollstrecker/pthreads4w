@@ -11,13 +11,21 @@ jobs:
       matrix:
         os: [windows-2016, windows-2019]
         type: [Debug, Release]
+        exception: [No-Exceptions, C++-Exceptions, structured-Exceptions]
       fail-fast: false
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Configure
+      - if: matrix.exception == 'No-Exceptions'
+        name: Configure
         run: cmake -S . -B build
+      - if: matrix.exception == 'C++-Exceptions'
+        name: Configure
+        run: cmake -S . -B build -DBUILD_C=FALSE -DBUILD_CE=TRUE
+      - if: matrix.exception == 'structured-Exceptions'
+        name: Configure
+        run: cmake -S . -B build -DBUILD_C=FALSE -DBUILD_SE=TRUE
       - name: Build ${{ matrix.type }}
         run: cmake --build build --config ${{ matrix.type }}
       - name: Test ${{ matrix.type }}
