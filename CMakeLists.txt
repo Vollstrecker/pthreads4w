@@ -28,15 +28,15 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 option (BUILD_TESTING "Run Tests after compile" ON)
-option (BUILD_C "Build lib with no exceptions - uses setjmp/longjmp" ON)
-option (BUILD_CE "Build lib with C++ Error Handling" OFF)
-option (BUILD_SE "Build lib with structured Error Handling" OFF)
-option (BUILD_ALL "Build all 3 flavours of the libs" OFF)
+option (PTHREADS4W_BUILD_C "Build lib with no exceptions - uses setjmp/longjmp" ON)
+option (PTHREADS4W_BUILD_CE "Build lib with C++ Error Handling" OFF)
+option (PTHREADS4W_BUILD_SE "Build lib with structured Error Handling" OFF)
+option (PTHREADS4W_BUILD_ALL "Build all 3 flavours of the libs" OFF)
 
-if (BUILD_ALL)
-	set (BUILD_C TRUE)
-	set (BUILD_CE TRUE)
-	set (BUILD_SE TRUE)
+if (PTHREADS4W_BUILD_ALL)
+	set (PTHREADS4W_BUILD_C TRUE)
+	set (PTHREADS4W_BUILD_CE TRUE)
+	set (PTHREADS4W_BUILD_SE TRUE)
 endif()
 
 set (PTHREAD_SOURCES
@@ -193,7 +193,7 @@ set (PTHREAD_HEADERS
 	sched.h
 )
 
-if (BUILD_C)
+if (PTHREADS4W_BUILD_C)
 	add_library (pthreadVC SHARED
 		${PTHREAD_SOURCES}
 	)
@@ -263,7 +263,7 @@ if (BUILD_C)
 	)
 endif()
 
-if (BUILD_CE)
+if (PTHREADS4W_BUILD_CE)
 	add_library (pthreadVCE SHARED
 		${PTHREAD_SOURCES}
 	)
@@ -341,7 +341,7 @@ if (BUILD_CE)
 	)
 endif()
 
-if (BUILD_SE)
+if (PTHREADS4W_BUILD_SE)
 	add_library (pthreadVSE SHARED
 		${PTHREAD_SOURCES}
 	)

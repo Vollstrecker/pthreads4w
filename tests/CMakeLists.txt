@@ -74,15 +74,15 @@ function (PT4WCREATE_TEST TESTNAME)
 	endforeach()
 endfunction()
 
-if (BUILD_C)
+if (PTHREADS4W_BUILD_C)
 	list (APPEND SUFFIXES "C")
 endif()
 
-if (BUILD_CE)
+if (PTHREADS4W_BUILD_CE)
 	list (APPEND SUFFIXES "CE")
 endif()
 
-if (BUILD_SE)
+if (PTHREADS4W_BUILD_SE)
 	list (APPEND SUFFIXES "SE")
 endif()
 
