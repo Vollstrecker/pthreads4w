@@ -17,16 +17,16 @@ function (PT4WCREATE_TEST TESTNAME)
 			)
 		endif()
 
-		add_test (NAME test-pthread4wV${SUFFIX}-${TESTNAME}
+		add_test (NAME pthread4w_V${SUFFIX}-${TESTNAME}
 			COMMAND test-pthread4wV${SUFFIX}-${TESTNAME}
 		)
 
-		set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+		set_tests_properties (pthread4w_V${SUFFIX}-${TESTNAME} PROPERTIES
 			FIXTURES_SETUP ${TESTNAME}V${SUFFIX}
 		)
 
 		if (PT4WCT_DEPENDS)
-			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+			set_tests_properties (pthread4w_V${SUFFIX}-${TESTNAME} PROPERTIES
 				FIXTURES_REQUIRED "${PT4WCT_DEPENDS}V${SUFFIX}"
 			)
 		endif()
@@ -37,7 +37,7 @@ function (PT4WCREATE_TEST TESTNAME)
 				${PT4WCT_ADDITIONAL_SOURCE}
 			)
 
-			add_test (NAME test-pthread4wV${SUFFIX}-${TESTNAME}-static
+			add_test (NAME pthread4w_V${SUFFIX}-${TESTNAME}-static
 				COMMAND test-pthread4wV${SUFFIX}-${TESTNAME}-static
 			)
 
@@ -57,16 +57,16 @@ function (PT4WCREATE_TEST TESTNAME)
 				PRIVATE ${PT4WCT_ADITIONAL_LIB}
 			)
 
-			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME} PROPERTIES
+			set_tests_properties (pthread4w_V${SUFFIX}-${TESTNAME} PROPERTIES
 				ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthreadV${SUFFIX}>\;%PATH%"
 			)
 
-			set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME}-static PROPERTIES
+			set_tests_properties (pthread4w_V${SUFFIX}-${TESTNAME}-static PROPERTIES
 				FIXTURES_SETUP ${TESTNAME}V${SUFFIX}-static
 			)
 
 			if (PT4WCT_DEPENDS)
-				set_tests_properties (test-pthread4wV${SUFFIX}-${TESTNAME}-static PROPERTIES
+				set_tests_properties (pthread4w_V${SUFFIX}-${TESTNAME}-static PROPERTIES
 					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}V${SUFFIX}-static"
 				)
 			endif()
