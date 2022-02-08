@@ -22,10 +22,10 @@ jobs:
         run: cmake -S . -B build
       - if: matrix.exception == 'C++-Exceptions'
         name: Configure
-        run: cmake -S . -B build -DBUILD_C=FALSE -DBUILD_CE=TRUE
+        run: cmake -S . -B build -DPTHREADS4W_BUILD_C=FALSE -DPTHREADS4W_BUILD_CE=TRUE
       - if: matrix.exception == 'structured-Exceptions'
         name: Configure
-        run: cmake -S . -B build -DBUILD_C=FALSE -DBUILD_SE=TRUE
+        run: cmake -S . -B build -DPTHREADS4W_BUILD_C=FALSE -DPTHREADS4W_BUILD_SE=TRUE
       - name: Build ${{ matrix.type }}
         run: cmake --build build --config ${{ matrix.type }}
       - name: Test ${{ matrix.type }}
