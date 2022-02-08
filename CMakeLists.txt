@@ -12,6 +12,12 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	set (DEFAULT_BUILD_TYPE "Debug")
 endif()
 
+if (MSVC)
+	set (COMPILER_INDICATOR "V")
+else()
+	set (COMPILER_INDICATOR "G")
+endif()
+
 # Set the possible values of build type for cmake-gui
 if (CMAKE_CONFIGURATION_TYPES)
 	set (CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE
@@ -198,33 +204,33 @@ set (PTHREAD_HEADERS
 )
 
 if (PTHREADS4W_BUILD_C)
-	add_library (pthreadVC SHARED
+	add_library (pthread${COMPILER_INDICATOR}C SHARED
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::Threads ALIAS pthreadVC)
-	add_library (Threads::Shared ALIAS pthreadVC)
+	add_library (Threads::Threads ALIAS pthread${COMPILER_INDICATOR}C)
+	add_library (Threads::Shared ALIAS pthread${COMPILER_INDICATOR}C)
 
-	target_include_directories (pthreadVC
+	target_include_directories (pthread${COMPILER_INDICATOR}C
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVC PROPERTIES
-		OUTPUT_NAME pthreadVC${PTHREADS4W_VERSION_MAJOR}
+	set_target_properties (pthread${COMPILER_INDICATOR}C PROPERTIES
+		OUTPUT_NAME pthreadV${COMPILER_INDICATOR}${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::Threads
 		VERSION ${PTHREADS4W_VERSION}
 		SOVERSION ${PTHREADS4W_VERSION_MAJOR}
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVC
+	target_compile_definitions (pthread${COMPILER_INDICATOR}C
 		PUBLIC CLEANUP=__PTW32_CLEANUP_C
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	install (TARGETS pthreadVC
+	install (TARGETS pthread${COMPILER_INDICATOR}C
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
 		LIBRARY
@@ -233,33 +239,33 @@ if (PTHREADS4W_BUILD_C)
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/pthread
 	)
 
-	add_library (pthreadVCS STATIC
+	add_library (pthread${COMPILER_INDICATOR}C-static STATIC
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::Static ALIAS pthreadVCS)
+	add_library (Threads::Static ALIAS pthread${COMPILER_INDICATOR}C-static)
 
-	target_include_directories (pthreadVCS
+	target_include_directories (pthread${COMPILER_INDICATOR}C-static
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVCS PROPERTIES
-		OUTPUT_NAME libpthreadVC${PTHREADS4W_VERSION_MAJOR}
+	set_target_properties (pthread${COMPILER_INDICATOR}C-static PROPERTIES
+		OUTPUT_NAME libpthread${COMPILER_INDICATOR}C${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::Static
 		VERSION ${PTHREADS4W_VERSION}
 		SOVERSION ${PTHREADS4W_VERSION_MAJOR}
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVCS
+	target_compile_definitions (pthread${COMPILER_INDICATOR}C-static
 		PUBLIC CLEANUP=__PTW32_CLEANUP_C
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE __PTW32_STATIC_LIB
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	install (TARGETS pthreadVCS
+	install (TARGETS pthread${COMPILER_INDICATOR}C-static
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
 		LIBRARY	DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -268,37 +274,37 @@ if (PTHREADS4W_BUILD_C)
 endif()
 
 if (PTHREADS4W_BUILD_CE)
-	add_library (pthreadVCE SHARED
+	add_library (pthread${COMPILER_INDICATOR}CE SHARED
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::CEShared ALIAS pthreadVCE)
+	add_library (Threads::CEShared ALIAS pthread${COMPILER_INDICATOR}CE)
 
-	target_include_directories (pthreadVCE
+	target_include_directories (pthread${COMPILER_INDICATOR}CE
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVCE PROPERTIES
-		OUTPUT_NAME pthreadVCE${PTHREADS4W_VERSION_MAJOR}
+	set_target_properties (pthread${COMPILER_INDICATOR}CE PROPERTIES
+		OUTPUT_NAME pthread${COMPILER_INDICATOR}CE${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::CEShared
 		VERSION ${PTHREADS4W_VERSION}
 		SOVERSION ${PTHREADS4W_VERSION_MAJOR}
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVCE
+	target_compile_definitions (pthread${COMPILER_INDICATOR}CE
 		PUBLIC CLEANUP=__PTW32_CLEANUP_CXX
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	target_compile_options (pthreadVCE
+	target_compile_options (pthread${COMPILER_INDICATOR}CE
 		PRIVATE "/EHs"
 		PRIVATE "/TP"
 	)
 
-	install (TARGETS pthreadVCE
+	install (TARGETS pthread${COMPILER_INDICATOR}CE
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
 		LIBRARY
@@ -307,18 +313,18 @@ if (PTHREADS4W_BUILD_CE)
 		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/pthread
 	)
 
-	add_library (pthreadVCES STATIC
+	add_library (pthread${COMPILER_INDICATOR}CE-static STATIC
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::CEStatic ALIAS pthreadVCES)
+	add_library (Threads::CEStatic ALIAS pthread${COMPILER_INDICATOR}CE-static)
 
-	target_include_directories (pthreadVCES
+	target_include_directories (pthread${COMPILER_INDICATOR}CE-static
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVCES PROPERTIES
+	set_target_properties (pthread${COMPILER_INDICATOR}CE-static PROPERTIES
 		OUTPUT_NAME libpthreadVCE${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::CEStatic
 		VERSION ${PTHREADS4W_VERSION}
@@ -326,18 +332,18 @@ if (PTHREADS4W_BUILD_CE)
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVCES
+	target_compile_definitions (pthread${COMPILER_INDICATOR}CE-static
 		PUBLIC CLEANUP=__PTW32_CLEANUP_CXX
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE __PTW32_STATIC_LIB
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	target_compile_options (pthreadVCES
+	target_compile_options (pthread${COMPILER_INDICATOR}CE-static
 		PRIVATE "/EHs"
 		PRIVATE "/TP"
 	)
-	install (TARGETS pthreadVCES
+	install (TARGETS pthread${COMPILER_INDICATOR}CE-static
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
 		LIBRARY	DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -346,18 +352,18 @@ if (PTHREADS4W_BUILD_CE)
 endif()
 
 if (PTHREADS4W_BUILD_SE)
-	add_library (pthreadVSE SHARED
+	add_library (pthread${COMPILER_INDICATOR}SE SHARED
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::SEShared ALIAS pthreadVSE)
+	add_library (Threads::SEShared ALIAS pthread${COMPILER_INDICATOR}SE)
 
 	target_include_directories (pthreadVSE
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVSE PROPERTIES
+	set_target_properties (pthread${COMPILER_INDICATOR}SE PROPERTIES
 		OUTPUT_NAME pthreadVSE${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::SEShared
 		VERSION ${PTHREADS4W_VERSION}
@@ -365,33 +371,31 @@ if (PTHREADS4W_BUILD_SE)
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVSE
+	target_compile_definitions (pthread${COMPILER_INDICATOR}SE
 		PUBLIC CLEANUP=__PTW32_CLEANUP_SEH
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	install (TARGETS pthreadVSE
+	install (TARGETS pthread${COMPILER_INDICATOR}SE
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
-		LIBRARY
-		DESTINATION ${CMAKE_INSTALL_LIBDIR}
-		PUBLIC_HEADER
-		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/pthread
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/pthread
 	)
 
-	add_library (pthreadVSES STATIC
+	add_library (pthread${COMPILER_INDICATOR}SE-static STATIC
 		${PTHREAD_SOURCES}
 	)
 
-	add_library (Threads::SEStatic ALIAS pthreadVSES)
+	add_library (Threads::SEStatic ALIAS pthread${COMPILER_INDICATOR}SE-static)
 
-	target_include_directories (pthreadVSES
+	target_include_directories (pthread${COMPILER_INDICATOR}SE-static
 		INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
 		PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 	)
 
-	set_target_properties (pthreadVSES PROPERTIES
+	set_target_properties (pthread${COMPILER_INDICATOR}SE-static PROPERTIES
 		OUTPUT_NAME libpthreadVSE${PTHREADS4W_VERSION_MAJOR}
 		EXPORT_NAME Threads::SEStatic
 		VERSION ${PTHREADS4W_VERSION}
@@ -399,14 +403,14 @@ if (PTHREADS4W_BUILD_SE)
 		PUBLIC_HEADER "${PTHREAD_HEADERS}"
 	)
 
-	target_compile_definitions (pthreadVSES
+	target_compile_definitions (pthread${COMPILER_INDICATOR}SE-static
 		PUBLIC CLEANUP=__PTW32_CLEANUP_SEH
 		PRIVATE __PTW32_BUILD_INLINED
 		PRIVATE __PTW32_STATIC_LIB
 		PRIVATE HAVE_CONFIG_H
 	)
 
-	install (TARGETS pthreadVSES
+	install (TARGETS pthread${COMPILER_INDICATOR}SE-static
 		DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		EXPORT PTHREADS4W
 		LIBRARY	DESTINATION ${CMAKE_INSTALL_LIBDIR}
