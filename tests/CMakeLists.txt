@@ -41,11 +41,6 @@ function (PT4WCREATE_TEST TESTNAME)
 				COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
 			)
 
-			if (PT4WCT_NEEDS_ROOT_INCL)
-				target_include_directories (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
-					PRIVATE ${PROJECT_SOURCE_DIR}
-				)
-			endif()
 
 			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
 				PRIVATE pthread${COMPILER_INDICATOR}${SUFFIX}
