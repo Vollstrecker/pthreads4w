@@ -41,6 +41,25 @@ function (PT4WCREATE_TEST TESTNAME)
 				COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
 			)
 
+			add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+				${TESTNAME}.c
+				${PROJECT_SOURCE_DIR}/pthread.c
+				${PT4WCT_ADDITIONAL_SOURCE}
+			)
+
+			add_test (NAME pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+				COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+			)
+
+			target_compile_definitions (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+				PRIVATE __PTW32_DLLPORT=
+				PRIVATE __PTW32_CONFIG_H
+				PRIVATE __PTW32_STATIC_LIB
+			)
+
+			target_include_directories (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+				PRIVATE ${PROJECT_SOURCE_DIR}
+			)
 
 			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
 				PRIVATE pthread${COMPILER_INDICATOR}${SUFFIX}
@@ -52,6 +71,10 @@ function (PT4WCREATE_TEST TESTNAME)
 				PRIVATE ${PT4WCT_ADITIONAL_LIB}
 			)
 
+			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+				PRIVATE ${PT4WCT_ADITIONAL_LIB}
+			)
+
 			set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME} PROPERTIES
 				ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${COMPILER_INDICATOR}${SUFFIX}>\;%PATH%"
 			)
@@ -60,9 +83,17 @@ function (PT4WCREATE_TEST TESTNAME)
 				FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static
 			)
 
+			set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
+				FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static-nolib
+			)
+
 			if (PT4WCT_DEPENDS)
 				set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static PROPERTIES
 					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static"
+				)
+
+				set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
+					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static-nolib"
 				)
 			endif()
 		endif()
