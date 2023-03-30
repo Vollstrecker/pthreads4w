@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.11)
 
 project (PTHREADS4W
-	VERSION 3.0.2.0
+	VERSION 3.0.3.0
 	LANGUAGES C
 )
 
