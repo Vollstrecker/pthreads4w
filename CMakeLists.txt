@@ -195,6 +195,7 @@ set (PTHREAD_HEADERS
 if (PTHREADS4W_BUILD_C)
 	add_library (pthread${COMPILER_INDICATOR}C SHARED
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::Threads ALIAS pthread${COMPILER_INDICATOR}C)
@@ -232,6 +233,7 @@ if (PTHREADS4W_BUILD_C)
 
 	add_library (pthread${COMPILER_INDICATOR}C-static STATIC
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::Static ALIAS pthread${COMPILER_INDICATOR}C-static)
@@ -268,6 +270,7 @@ endif()
 if (PTHREADS4W_BUILD_CE)
 	add_library (pthread${COMPILER_INDICATOR}CE SHARED
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::CEShared ALIAS pthread${COMPILER_INDICATOR}CE)
@@ -309,6 +312,7 @@ if (PTHREADS4W_BUILD_CE)
 
 	add_library (pthread${COMPILER_INDICATOR}CE-static STATIC
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::CEStatic ALIAS pthread${COMPILER_INDICATOR}CE-static)
@@ -349,6 +353,7 @@ endif()
 if (PTHREADS4W_BUILD_SE)
 	add_library (pthread${COMPILER_INDICATOR}SE SHARED
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::SEShared ALIAS pthread${COMPILER_INDICATOR}SE)
@@ -384,6 +389,7 @@ if (PTHREADS4W_BUILD_SE)
 
 	add_library (pthread${COMPILER_INDICATOR}SE-static STATIC
 		${PTHREAD_SOURCES}
+		${PTHREAD_HEADERS}
 	)
 
 	add_library (Threads::SEStatic ALIAS pthread${COMPILER_INDICATOR}SE-static)
