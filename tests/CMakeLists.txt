@@ -6,6 +6,7 @@ function (PT4WCREATE_TEST TESTNAME)
 	cmake_parse_arguments (PARSE_ARGV 1 PT4WCT "${OPTS}" "${OVA}" "${MVA}")
 
 	foreach (SUFFIX ${SUFFIXES})
+            if(PTHREADS4W_BUILD_SHARED)
 		add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
 			${TESTNAME}.c
 			${PT4WCT_ADDITIONAL_SOURCE}
@@ -30,8 +31,9 @@ function (PT4WCREATE_TEST TESTNAME)
 				FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}"
 			)
 		endif()
-
+            endif(PTHREADS4W_BUILD_SHARED)
 		if (PT4WCT_NEEDS_LINK)
+                    if(PTHREADS4W_BUILD_STATIC)
 			add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
 				${TESTNAME}.c
 				${PT4WCT_ADDITIONAL_SOURCE}
@@ -61,41 +63,43 @@ function (PT4WCREATE_TEST TESTNAME)
 				PRIVATE ${PROJECT_SOURCE_DIR}
 			)
 
+                        target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
+                                PRIVATE pthread${COMPILER_INDICATOR}${SUFFIX}-static
+                                PRIVATE ${PT4WCT_ADITIONAL_LIB}
+                        )
+    
+                        target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+                                PRIVATE ${PT4WCT_ADITIONAL_LIB}
+                        )
+                        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static PROPERTIES
+                                FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static
+                        )
+    
+                        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
+                                FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static-nolib
+                        )
+    
+                        if (PT4WCT_DEPENDS)
+                                set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static PROPERTIES
+                                        FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static"
+                                )
+    
+                                set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
+                                        FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static-nolib"
+                                )
+                        endif()
+                    endif(PTHREADS4W_BUILD_STATIC)
+                    if(PTHREADS4W_BUILD_SHARED)
 			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
 				PRIVATE pthread${COMPILER_INDICATOR}${SUFFIX}
 				PRIVATE ${PT4WCT_ADITIONAL_LIB}
 			)
 
-			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
-				PRIVATE pthread${COMPILER_INDICATOR}${SUFFIX}-static
-				PRIVATE ${PT4WCT_ADITIONAL_LIB}
-			)
-
-			target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
-				PRIVATE ${PT4WCT_ADITIONAL_LIB}
-			)
 
 			set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME} PROPERTIES
 				ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${COMPILER_INDICATOR}${SUFFIX}>\;%PATH%"
 			)
-
-			set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static PROPERTIES
-				FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static
-			)
-
-			set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
-				FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static-nolib
-			)
-
-			if (PT4WCT_DEPENDS)
-				set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static PROPERTIES
-					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static"
-				)
-
-				set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib PROPERTIES
-					FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static-nolib"
-				)
-			endif()
+                    endif(PTHREADS4W_BUILD_SHARED)
 		endif()
 	endforeach()
 endfunction()
