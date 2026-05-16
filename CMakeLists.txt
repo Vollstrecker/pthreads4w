@@ -18,16 +18,6 @@ else()
 	set (COMPILER_INDICATOR "G")
 endif()
 
-# Set the possible values of build type for cmake-gui
-if (CMAKE_CONFIGURATION_TYPES)
-	set (CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE
-		STRING "Semicolon separated list of supported configuration types, only supports debug and release, anything else will be ignored" FORCE
-	)
-
-	set_property (CACHE CMAKE_CONFIGURATION_TYPES PROPERTY STRINGS
-		"Debug" "Release"
-	)
-endif()
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	message (STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
