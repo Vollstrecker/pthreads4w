@@ -27,10 +27,10 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	)
 endif()
 
-option (BUILD_TESTING "Run Tests after compile" ON)
 option (PTHREADS4W_BUILD_C "Build lib with no exceptions - uses setjmp/longjmp" ON)
 option (PTHREADS4W_BUILD_CE "Build lib with C++ Error Handling" OFF)
 option (PTHREADS4W_BUILD_SE "Build lib with structured Error Handling" OFF)
+option (PTHREADS4W_BUILD_TESTING "Run Tests after compile" ON)
 option (PTHREADS4W_BUILD_ALL "Build all 3 flavours of the libs" OFF)
 
 if (PTHREADS4W_BUILD_ALL)
@@ -440,7 +440,7 @@ install (FILES
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/
 )
 
-if (BUILD_TESTING)
+if (PTHREADS4W_BUILD_TESTING)
 	enable_testing()
 	add_subdirectory (tests)
 endif()
