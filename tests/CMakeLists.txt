@@ -527,6 +527,9 @@ PT4WCREATE_TEST (once4
   NEEDS_LINK
   DEPENDS cleanup0 once1 priority1)
 
+PT4WCREATE_TEST (openmp1
+  NEEDS_LINK)
+
 PT4WCREATE_TEST (priority1
   NEEDS_LINK
   DEPENDS join0 self1)
