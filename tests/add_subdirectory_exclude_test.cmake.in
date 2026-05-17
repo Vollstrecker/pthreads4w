@@ -1,0 +1,54 @@
+cmake_minimum_required(VERSION 3.11...3.31)
+
+project(
+  pt4w_add_subdirectory_exclude_test
+  LANGUAGES C
+  VERSION @PTHREADS4W_VERSION@)
+
+option(PTHREADS4W_BUILD_C "" @PTHREADS4W_BUILD_C@)
+option(PTHREADS4W_BUILD_CE "" @PTHREADS4W_BUILD_CE@)
+option(PTHREADS4W_BUILD_SE "" @PTHREADS4W_BUILD_SE@)
+option(PTHREADS4W_BUILD_TESTING "" OFF)
+option(PTHREADS4W_BUILD_SHARED "" @PTHREADS4W_BUILD_SHARED@)
+option(PTHREADS4W_BUILD_STATIC "" @PTHREADS4W_BUILD_STATIC@)
+
+add_subdirectory(@PTHREADS4W_SOURCE_DIR@
+  ${CMAKE_CURRENT_BINARY_DIR}/pt4w
+  EXCLUDE_FROM_ALL)
+
+if(PTHREADS4W_BUILD_SHARED)
+  if(PTHREADS4W_BUILD_C)
+    add_executable(test_affinity1C @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1C Threads::Threads)
+
+    add_executable(test_affinity1CS @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1CS Threads::Shared)
+  endif()
+
+  if(PTHREADS4W_BUILD_CE)
+    add_executable(test_affinity1CE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1CE Threads::CEShared)
+  endif()
+
+  if(PTHREADS4W_BUILD_SE)
+    add_executable(test_affinity1SE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1SE Threads::SEShared)
+  endif()
+endif(PTHREADS4W_BUILD_SHARED)
+
+if(PTHREADS4W_BUILD_STATIC)
+  if(PTHREADS4W_BUILD_C)
+    add_executable(test_affinity1CStatic @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1CStatic Threads::Static)
+  endif()
+
+  if(PTHREADS4W_BUILD_CE)
+    add_executable(test_affinity1CEStatic @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1CEStatic Threads::CEStatic)
+  endif()
+
+  if(PTHREADS4W_BUILD_SE)
+    add_executable(test_affinity1SEStatic @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_affinity1SEStatic Threads::SEStatic)
+  endif()
+endif(PTHREADS4W_BUILD_STATIC)
