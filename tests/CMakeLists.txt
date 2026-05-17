@@ -7,91 +7,91 @@ function (PT4WCREATE_TEST TESTNAME)
 
   foreach (SUFFIX ${SUFFIXES})
     if(PTHREADS4W_BUILD_SHARED)
-      add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+      add_executable (test-pthread4w${SUFFIX}-${TESTNAME}
         ${TESTNAME}.c
         ${PT4WCT_ADDITIONAL_SOURCE})
 
       if (PT4WCT_NEEDS_ROOT_INCL)
-        target_include_directories (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+        target_include_directories (test-pthread4w${SUFFIX}-${TESTNAME}
           PRIVATE ${PROJECT_SOURCE_DIR})
       endif()
 
-      add_test (NAME pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
-        COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME})
+      add_test (NAME pthread4w_${SUFFIX}-${TESTNAME}
+        COMMAND test-pthread4w${SUFFIX}-${TESTNAME})
 
-      set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+      set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}
         PROPERTIES
-          FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX})
+          FIXTURES_SETUP ${TESTNAME}${SUFFIX})
 
       if (PT4WCT_DEPENDS)
-        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+        set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}
           PROPERTIES
-            FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}")
+            FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${SUFFIX}")
       endif()
     endif(PTHREADS4W_BUILD_SHARED)
 
     if (PT4WCT_NEEDS_LINK)
       if(PTHREADS4W_BUILD_STATIC)
-        add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
+        add_executable (test-pthread4w${SUFFIX}-${TESTNAME}-static
           ${TESTNAME}.c
           ${PT4WCT_ADDITIONAL_SOURCE})
 
-        add_test (NAME pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
-          COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static)
+        add_test (NAME pthread4w_${SUFFIX}-${TESTNAME}-static
+          COMMAND test-pthread4w${SUFFIX}-${TESTNAME}-static)
 
-        add_executable (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+        add_executable (test-pthread4w${SUFFIX}-${TESTNAME}-static-nolib
           ${TESTNAME}.c
           ${PROJECT_SOURCE_DIR}/pthread.c
           ${PT4WCT_ADDITIONAL_SOURCE})
 
-        add_test (NAME pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
-          COMMAND test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib)
+        add_test (NAME pthread4w_${SUFFIX}-${TESTNAME}-static-nolib
+          COMMAND test-pthread4w${SUFFIX}-${TESTNAME}-static-nolib)
 
-        target_compile_definitions (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+        target_compile_definitions (test-pthread4w${SUFFIX}-${TESTNAME}-static-nolib
           PRIVATE
             __PTW32_DLLPORT=
             __PTW32_CONFIG_H
             __PTW32_STATIC_LIB)
 
-        target_include_directories (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+        target_include_directories (test-pthread4w${SUFFIX}-${TESTNAME}-static-nolib
           PRIVATE ${PROJECT_SOURCE_DIR})
 
-        target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
+        target_link_libraries (test-pthread4w${SUFFIX}-${TESTNAME}-static
           PRIVATE
-            pthread${COMPILER_INDICATOR}${SUFFIX}-static
+            pthread${SUFFIX}-static
             ${PT4WCT_ADITIONAL_LIB})
 
-        target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+        target_link_libraries (test-pthread4w${SUFFIX}-${TESTNAME}-static-nolib
           PRIVATE ${PT4WCT_ADITIONAL_LIB})
 
-        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
+        set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}-static
           PROPERTIES
-            FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static)
+            FIXTURES_SETUP ${TESTNAME}${SUFFIX}-static)
 
-        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+        set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}-static-nolib
           PROPERTIES
-            FIXTURES_SETUP ${TESTNAME}${COMPILER_INDICATOR}${SUFFIX}-static-nolib)
+            FIXTURES_SETUP ${TESTNAME}${SUFFIX}-static-nolib)
 
         if (PT4WCT_DEPENDS)
-          set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static
+          set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}-static
             PROPERTIES
-              FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static")
+              FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${SUFFIX}-static")
 
-          set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}-static-nolib
+          set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}-static-nolib
             PROPERTIES
-              FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${COMPILER_INDICATOR}${SUFFIX}-static-nolib")
+              FIXTURES_REQUIRED "${PT4WCT_DEPENDS}${SUFFIX}-static-nolib")
         endif()
       endif(PTHREADS4W_BUILD_STATIC)
 
       if(PTHREADS4W_BUILD_SHARED)
-        target_link_libraries (test-pthread4w${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+        target_link_libraries (test-pthread4w${SUFFIX}-${TESTNAME}
           PRIVATE
-            pthread${COMPILER_INDICATOR}${SUFFIX}
+            pthread${SUFFIX}
             ${PT4WCT_ADITIONAL_LIB})
 
-        set_tests_properties (pthread4w_${COMPILER_INDICATOR}${SUFFIX}-${TESTNAME}
+        set_tests_properties (pthread4w_${SUFFIX}-${TESTNAME}
           PROPERTIES
-            ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${COMPILER_INDICATOR}${SUFFIX}>\;%PATH%")
+            ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${SUFFIX}>\;%PATH%")
       endif(PTHREADS4W_BUILD_SHARED)
     endif(PT4WCT_NEEDS_LINK)
   endforeach()
