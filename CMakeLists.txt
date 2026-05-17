@@ -7,10 +7,6 @@ project (PTHREADS4W
 include (GNUInstallDirs)
 set (CMAKE_DEBUG_POSTFIX d)
 
-if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
-  set (DEFAULT_BUILD_TYPE "Debug")
-endif()
-
 if (MSVC)
   set (COMPILER_INDICATOR "V")
 else()
@@ -18,13 +14,9 @@ else()
 endif()
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message (STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
+  message (STATUS "Setting build type to Release as none was specified.")
 
-  set (CMAKE_BUILD_TYPE
-    "${DEFAULT_BUILD_TYPE}"
-    CACHE
-    STRING "Choose the type of build."
-    FORCE)
+  set (CMAKE_BUILD_TYPE "Release")
 endif()
 
 option (PTHREADS4W_BUILD_ALL "Build all 3 flavours of the libs" OFF)
