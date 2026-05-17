@@ -194,7 +194,7 @@ if (PTHREADS4W_BUILD_C)
 
     set_target_properties (pthreadC
       PROPERTIES
-        OUTPUT_NAME pthreadV${PTHREADS4W_VERSION_MAJOR}
+        OUTPUT_NAME pthreadC${PTHREADS4W_VERSION_MAJOR}
         EXPORT_NAME Threads::Threads
         VERSION ${PTHREADS4W_VERSION}
         SOVERSION ${PTHREADS4W_VERSION_MAJOR}
@@ -230,7 +230,7 @@ if (PTHREADS4W_BUILD_C)
 
     set_target_properties (pthreadC-static
       PROPERTIES
-        OUTPUT_NAME libpthreadC${PTHREADS4W_VERSION_MAJOR}
+        OUTPUT_NAME libpthreadC${PTHREADS4W_VERSION_MAJOR}s
         EXPORT_NAME Threads::Static
         VERSION ${PTHREADS4W_VERSION}
         SOVERSION ${PTHREADS4W_VERSION_MAJOR}
@@ -309,7 +309,7 @@ if (PTHREADS4W_BUILD_CE)
 
     set_target_properties (pthreadCE-static
       PROPERTIES
-        OUTPUT_NAME libpthreadVCE${PTHREADS4W_VERSION_MAJOR}
+        OUTPUT_NAME libpthreadCE${PTHREADS4W_VERSION_MAJOR}s
         EXPORT_NAME Threads::CEStatic
         VERSION ${PTHREADS4W_VERSION}
         SOVERSION ${PTHREADS4W_VERSION_MAJOR}
@@ -346,13 +346,13 @@ if (PTHREADS4W_BUILD_SE)
 
     add_library (Threads::SEShared ALIAS pthreadSE)
 
-    target_include_directories (pthreadVSE
+    target_include_directories (pthreadSE
       INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pthread>
       PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
     set_target_properties (pthreadSE
       PROPERTIES
-        OUTPUT_NAME pthreadVSE${PTHREADS4W_VERSION_MAJOR}
+        OUTPUT_NAME pthreadSE${PTHREADS4W_VERSION_MAJOR}
         EXPORT_NAME Threads::SEShared
         VERSION ${PTHREADS4W_VERSION}
         SOVERSION ${PTHREADS4W_VERSION_MAJOR}
@@ -387,7 +387,7 @@ if (PTHREADS4W_BUILD_SE)
 
     set_target_properties (pthreadSE-static
       PROPERTIES
-        OUTPUT_NAME libpthreadVSE${PTHREADS4W_VERSION_MAJOR}
+        OUTPUT_NAME libpthreadSE${PTHREADS4W_VERSION_MAJOR}s
         EXPORT_NAME Threads::SEStatic
         VERSION ${PTHREADS4W_VERSION}
         SOVERSION ${PTHREADS4W_VERSION_MAJOR}
