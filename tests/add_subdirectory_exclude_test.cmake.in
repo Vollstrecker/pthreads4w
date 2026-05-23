@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 3.11...3.31)
 
-project(
-  pt4w_add_subdirectory_exclude_test
-  LANGUAGES C
-  VERSION @PTHREADS4W_VERSION@)
+if(PTHREADS4W_BUILD_CE)
+  project(
+    pt4w_add_subdirectory_exclude_test
+    LANGUAGES CXX
+    VERSION @PTHREADS4W_VERSION@)
 
-option(PTHREADS4W_BUILD_C "" @PTHREADS4W_BUILD_C@)
-option(PTHREADS4W_BUILD_CE "" @PTHREADS4W_BUILD_CE@)
-option(PTHREADS4W_BUILD_SE "" @PTHREADS4W_BUILD_SE@)
+  set_source_files_properties(@PTHREADS4W_SOURCE_DIR@/tests/openmp1.c
+    PROPERTIES LANGUAGE CXX)
+else()
+  project(
+    pt4w_add_subdirectory_exclude_test
+    LANGUAGES C
+    VERSION @PTHREADS4W_VERSION@)
+endif()
+
 option(PTHREADS4W_BUILD_TESTING "" OFF)
 option(PTHREADS4W_BUILD_SHARED "" @PTHREADS4W_BUILD_SHARED@)
 option(PTHREADS4W_BUILD_STATIC "" @PTHREADS4W_BUILD_STATIC@)

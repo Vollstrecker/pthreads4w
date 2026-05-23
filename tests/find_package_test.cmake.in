@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.11...3.31)
 
-project(
-  pt4w_add_find_package_test
-  LANGUAGES C
-  VERSION @PTHREADS4W_VERSION@)
+if(PTHREADS4W_BUILD_CE)
+  project(
+    pt4w_find_package_test
+    LANGUAGES CXX
+    VERSION @PTHREADS4W_VERSION@)
+else()
+  project(
+    pt4w_find_package_test
+    LANGUAGES C
+    VERSION @PTHREADS4W_VERSION@)
+endif()
 
-option(PTHREADS4W_BUILD_C "" @PTHREADS4W_BUILD_C@)
-option(PTHREADS4W_BUILD_CE "" @PTHREADS4W_BUILD_CE@)
-option(PTHREADS4W_BUILD_SE "" @PTHREADS4W_BUILD_SE@)
-option(PTHREADS4W_BUILD_TESTING "" OFF)
 option(PTHREADS4W_BUILD_SHARED "" @PTHREADS4W_BUILD_SHARED@)
 option(PTHREADS4W_BUILD_STATIC "" @PTHREADS4W_BUILD_STATIC@)
 
@@ -16,21 +19,37 @@ find_package(PTHREADS4W @PTHREADS4W_VERSION@ CONFIG REQUIRED)
 
 if(PTHREADS4W_BUILD_SHARED)
   if(PTHREADS4W_BUILD_C)
-    add_executable(test_affinity1C @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
-    target_link_libraries(test_affinity1C Threads::Threads)
+    add_executable(test_openMP1C @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_openMP1C Threads::Threads)
 
-    add_executable(test_affinity1CS @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
-    target_link_libraries(test_affinity1CS Threads::Shared)
+    target_compile_definitions (test_openMP1C
+          PRIVATE __PTW32_CLEANUP_C)
+
+    add_executable(test_openMP1CS @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_openMP1CS Threads::Shared)
+
+    target_compile_definitions (test_openMP1CS
+          PRIVATE __PTW32_CLEANUP_C)
   endif()
 
   if(PTHREADS4W_BUILD_CE)
-    add_executable(test_affinity1CE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
-    target_link_libraries(test_affinity1CE Threads::CEShared)
+    set_source_files_properties(@PTHREADS4W_SOURCE_DIR@/tests/openmp1.c
+      PROPERTIES
+        LANGUAGE CXX)
+
+    add_executable(test_openMP1CE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_openMP1CE Threads::CEShared)
+
+    target_compile_definitions (test_openMP1CE
+          PRIVATE __PTW32_CLEANUP_CXX>)
   endif()
 
   if(PTHREADS4W_BUILD_SE)
-    add_executable(test_affinity1SE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
-    target_link_libraries(test_affinity1SE Threads::SEShared)
+    add_executable(test_openMP1SE @PTHREADS4W_SOURCE_DIR@/tests/openmp1.c)
+    target_link_libraries(test_openMP1SE Threads::SEShared)
+
+    target_compile_definitions (test_openMP1SE
+          PRIVATE __PTW32_CLEANUP_SEH)
   endif()
 endif(PTHREADS4W_BUILD_SHARED)
 
