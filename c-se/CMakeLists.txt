@@ -30,8 +30,8 @@ if (PTHREADS4W_BUILD_C)
         CLEANUP=__PTW32_CLEANUP_C
         $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
-        __PTW32_BUILD_INLINED
-        HAVE_CONFIG_H)
+        HAVE_CONFIG_H
+        $<$<CXX_COMPILER_ID:MSVC>:__PTW32_BUILD_INLINED>)
 
     install (TARGETS pthreadC
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -68,9 +68,9 @@ if (PTHREADS4W_BUILD_C)
         CLEANUP=__PTW32_CLEANUP_C
         $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
-        __PTW32_BUILD_INLINED
         __PTW32_STATIC_LIB
-        HAVE_CONFIG_H)
+        HAVE_CONFIG_H
+        $<$<CXX_COMPILER_ID:MSVC>:__PTW32_BUILD_INLINED>)
 
     install (TARGETS pthreadC-static
         COMPONENT Development
