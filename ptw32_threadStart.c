@@ -95,7 +95,7 @@ ExceptionFilter (EXCEPTION_POINTERS * ep, DWORD * ei)
 # if defined(__GNUC__) && __GNUC__ < 3
 #   include <new.h>
 # else
-#   include <new>
+#   include <exception>
 using
   std::terminate;
 using
