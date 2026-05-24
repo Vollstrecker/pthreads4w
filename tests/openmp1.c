@@ -63,8 +63,10 @@ int main(int argc, char *argv[]) {
 
   if (argc>1) Verbose = 1;
 
-  omp_set_nested(-1);
-  printf("%s%s%s\n", "Nested parallel blocks are ", omp_get_nested()?" ":"NOT ", "supported.");
+  printf("%s%s%s\n",
+         "Nested parallel blocks are ",
+         omp_get_max_active_levels() > 1 ? " " : "NOT ",
+         "supported.");
 
   MainThread();
 
