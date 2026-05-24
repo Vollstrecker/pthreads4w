@@ -156,13 +156,13 @@ function (PT4WCREATE_TEST TESTNAME)
           endif()
 
           set (_omp_lib OpenMP::OpenMP_CXX)
+        else()
+          set (_omp_lib OpenMP::OpenMP_C)
         endif()
 
         set_tests_properties (pthreads4w_${SUFFIX}-${TESTNAME}
           PROPERTIES
             ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${SUFFIX}>\;%PATH%")
-        else()
-          set (_omp_lib OpenMP::OpenMP_C)
       endif(PTHREADS4W_BUILD_SHARED)
     endif(PT4WCT_NEEDS_LINK)
 
