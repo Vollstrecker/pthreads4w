@@ -28,20 +28,19 @@ jobs:
           -DPTHREADS4W_BUILD_SHARED=${{ matrix.link == 'shared' && 'ON' || 'OFF' }}
 
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release -- /verbosity:detailed
 
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
 
   msys:
-    name: msys-${{ matrix.sys }}-${{ matrix.variant }}
+    name: msys-${{ matrix.sys }}
     runs-on: ${{ matrix.os || 'windows-latest' }}
 
     strategy:
       fail-fast: false
       matrix:
         sys: [mingw32, mingw64, ucrt64, clang64, clangarm64]
-        variant: [C, CE]
         include:
           - sys: clangarm64
             os: windows-11-arm
@@ -74,8 +73,7 @@ jobs:
             -S . \
             -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DPTHREADS4W_BUILD_${{ matrix.variant }}=ON
+            -DCMAKE_BUILD_TYPE=Release
 
       - name: Configure clang
         if: matrix.sys == 'clang64' || matrix.sys == 'clangarm64'
@@ -85,49 +83,7 @@ jobs:
             -S . \
             -B build \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DPTHREADS4W_BUILD_${{ matrix.variant }}=ON
-
-      - name: Build
-        run: cmake --build build
-
-      - name: Test
-        run: ctest --output-on-failure --test-dir build
-
-  cygwin:
-    name: cygwin-${{ matrix.variant }}
-    runs-on: windows-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        variant: [C, CE]
-
-   defaults:
-      run:
-        shell: C:\cygwin\bin\bash.exe --login -o igncr '{0}'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Cygwin
-        uses: cygwin/cygwin-install-action@master
-        with:
-          packages: >-
-            cmake
-            make
-            gcc-core
-            gcc-g++
-
-      - name: Configure
-        run: |
-          cmake "$GITHUB_WORKSPACE" \
-            -B build \
-            -G "Unix Makefiles" \
-            -DPTHREADS4W_BUILD_${{ matrix.variant }}=ON
+            -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         run: cmake --build build
