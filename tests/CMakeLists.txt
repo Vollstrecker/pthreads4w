@@ -70,7 +70,8 @@ function (PT4WCREATE_TEST TESTNAME)
               __PTW32_CONFIG_H
               __PTW32_STATIC_LIB
               $<$<STREQUAL:${SUFFIX},C>:__PTW32_CLEANUP_C>
-              $<$<STREQUAL:${SUFFIX},CE>:__PTW32_CLEANUP_CXX>)
+              $<$<STREQUAL:${SUFFIX},CE>:__PTW32_CLEANUP_CXX>
+              $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>)
           target_include_directories (pthreads4w${SUFFIX}-${TESTNAME}-static-nolib
             PRIVATE ${PROJECT_SOURCE_DIR})
 
@@ -85,7 +86,8 @@ function (PT4WCREATE_TEST TESTNAME)
         if(SUFFIX STREQUAL "CE")
           target_compile_definitions (pthreads4w${SUFFIX}-${TESTNAME}-static-nolib
             PRIVATE
-              __PtW32NoCatchWarn)
+              __PtW32NoCatchWarn
+              $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>)
           target_compile_definitions (pthreads4w${SUFFIX}-${TESTNAME}-static
             PRIVATE
               __PtW32NoCatchWarn)
