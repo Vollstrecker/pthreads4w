@@ -140,8 +140,15 @@ extern int __ptw32_on_process_exit(void)
 }
 
 #if defined(__GNUC__)
-__attribute__((section(".ctors"), used)) extern int (*gcc_ctor)(void) = __ptw32_on_process_init;
-__attribute__((section(".dtors"), used)) extern int (*gcc_dtor)(void) = __ptw32_on_process_exit;
+__attribute__((constructor))
+static void ptw32_init_ctor(void) {
+  __ptw32_on_process_init();
+}
+
+__attribute__((destructor))
+static void ptw32_fini_dtor(void) {
+  __ptw32_on_process_exit();
+}
 #elif defined(_MSC_VER)
 #  if _MSC_VER >= 1400 /* MSVC8+ */
 #    pragma section(".CRT$XCU", long, read)
