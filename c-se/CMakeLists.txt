@@ -26,7 +26,9 @@ if (PTHREADS4W_BUILD_C)
         PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
     target_compile_definitions (pthreadC
-      PUBLIC CLEANUP=__PTW32_CLEANUP_C
+      PUBLIC
+        CLEANUP=__PTW32_CLEANUP_C
+        $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
         __PTW32_BUILD_INLINED
         HAVE_CONFIG_H)
@@ -62,7 +64,9 @@ if (PTHREADS4W_BUILD_C)
         PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
     target_compile_definitions (pthreadC-static
-      PUBLIC CLEANUP=__PTW32_CLEANUP_C
+      PUBLIC
+        CLEANUP=__PTW32_CLEANUP_C
+        $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
         __PTW32_BUILD_INLINED
         __PTW32_STATIC_LIB
@@ -100,7 +104,9 @@ if (PTHREADS4W_BUILD_SE)
         PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
     target_compile_definitions (pthreadSE
-      PUBLIC __PTW32_CLEANUP_SEH
+      PUBLIC
+        __PTW32_CLEANUP_SEH
+        $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
         __PTW32_BUILD_INLINED
         HAVE_CONFIG_H)
@@ -135,7 +141,9 @@ if (PTHREADS4W_BUILD_SE)
         PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
     target_compile_definitions (pthreadSE-static
-      PUBLIC __PTW32_CLEANUP_SEH
+      PUBLIC
+        __PTW32_CLEANUP_SEH
+        $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
       PRIVATE
         __PTW32_BUILD_INLINED
         PRIVATE __PTW32_STATIC_LIB

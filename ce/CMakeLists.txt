@@ -26,7 +26,9 @@ if(PTHREADS4W_BUILD_SHARED)
       PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
   target_compile_definitions (pthreadCE
-    PUBLIC __PTW32_CLEANUP_CXX
+    PUBLIC
+      __PTW32_CLEANUP_CXX
+      $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
     PRIVATE
       HAVE_CONFIG_H)
 
@@ -69,7 +71,9 @@ if(PTHREADS4W_BUILD_STATIC)
       PUBLIC_HEADER "${PTHREAD_HEADERS}")
 
   target_compile_definitions (pthreadCE-static
-    PUBLIC __PTW32_CLEANUP_CXX
+    PUBLIC
+      __PTW32_CLEANUP_CXX
+      $<$<BOOL:${HAVE_STDINT_H}>:HAVE_STDINT_H=1>
     PRIVATE
       __PTW32_STATIC_LIB
       HAVE_CONFIG_H)

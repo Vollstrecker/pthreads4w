@@ -183,6 +183,9 @@ set (PTHREAD_HEADERS
   ${PTHREADS4W_SOURCE_DIR}/pthread.h
   ${PTHREADS4W_SOURCE_DIR}/sched.h)
 
+include(CheckIncludeFile)
+check_include_file(stdint.h HAVE_STDINT_H)
+
 #set_source_files_properties(${PTHREAD_SOURCES}
 #  PROPERTIES LANGUAGE C)
 
