@@ -27,6 +27,10 @@ if (PTHREADS4W_BUILD_ALL)
   set (PTHREADS4W_BUILD_SE TRUE)
 endif()
 
+if(MSVC AND PTHREADS4W_BUILD_SE)
+  message(FATAL_ERROR "SEH is only on MSVC fully supported")
+endif()
+
 set (PTHREAD_SOURCES
   ${PTHREADS4W_SOURCE_DIR}/cleanup.c
   ${PTHREADS4W_SOURCE_DIR}/create.c
