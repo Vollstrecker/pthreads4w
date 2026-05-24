@@ -1209,12 +1209,6 @@ __PTW32_DLLPORT unsigned long  __PTW32_CDECL __ptw32_get_exception_services_code
         catch( __ptw32_exception & ) { throw; } \
         catch( ... )
 
-#else /* _MSC_VER */
-
-#define catch( E ) \
-        catch( __ptw32_exception & ) { throw; } \
-        catch( E )
-
 #endif /* _MSC_VER */
 
 #endif /* __PTW32_CLEANUP_CXX */
