@@ -154,19 +154,34 @@ function (PT4WCREATE_TEST TESTNAME)
               TARGET_DIRECTORY pthreads4w${SUFFIX}-${TESTNAME}
               PROPERTIES LANGUAGE CXX)
           endif()
-
-          set (_omp_lib OpenMP::OpenMP_CXX)
-        else()
-          set (_omp_lib OpenMP::OpenMP_C)
         endif()
 
-        set_tests_properties (pthreads4w_${SUFFIX}-${TESTNAME}
+        get_filename_component(COMPILER_DIR "${CMAKE_C_COMPILER}" DIRECTORY)
+
+        set(TEST_PATH "PATH=${COMPILER_DIR}\;$<TARGET_FILE_DIR:pthread${SUFFIX}>\;%PATH%")
+        set_tests_properties(pthreads4w_${SUFFIX}-${TESTNAME}
           PROPERTIES
-            ENVIRONMENT "PATH=$<TARGET_FILE_DIR:pthread${SUFFIX}>\;%PATH%")
+            ENVIRONMENT "${TEST_PATH}")
       endif(PTHREADS4W_BUILD_SHARED)
     endif(PT4WCT_NEEDS_LINK)
 
     if(PT4WCT_NEEDS_OPENMP)
+      if(SUFFIX STREQUAL "CE")
+        set (_omp_lib OpenMP::OpenMP_CXX)
+
+        #Working around broken omp targets
+        if (MSVC)
+          target_link_libraries(OpenMP::OpenMP_CXX INTERFACE vcomp)
+        endif()
+      else()
+        set (_omp_lib OpenMP::OpenMP_C)
+
+        #Working around broken omp targets
+        if (MSVC)
+          target_link_libraries(OpenMP::OpenMP_C INTERFACE vcomp)
+        endif()
+      endif()
+
       if(PTHREADS4W_BUILD_SHARED)
         target_link_libraries(pthreads4w${SUFFIX}-${TESTNAME}
           PRIVATE ${_omp_lib})
