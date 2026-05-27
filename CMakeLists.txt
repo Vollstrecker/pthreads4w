@@ -27,7 +27,11 @@ if (PTHREADS4W_BUILD_ALL)
   set (PTHREADS4W_BUILD_SE TRUE)
 endif()
 
-if(MSVC AND PTHREADS4W_BUILD_SE)
+if(PTHREADS4W_BUILD_CE AND NOT MSVC)
+  message(FATAL_ERROR "Native pthreads conflicts with this and breaks everything.")
+endif()
+
+if(PTHREADS4W_BUILD_SE AND NOT MSVC)
   message(FATAL_ERROR "SEH is only on MSVC fully supported")
 endif()
 
