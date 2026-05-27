@@ -28,7 +28,7 @@ jobs:
           -DPTHREADS4W_BUILD_SHARED=${{ matrix.link == 'shared' && 'ON' || 'OFF' }}
 
       - name: Build
-        run: cmake --build build --config Release -- /verbosity:detailed
+        run: cmake --build build --config Release
 
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
