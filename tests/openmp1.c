@@ -3,6 +3,23 @@
 #include <omp.h>
 #include <pthread.h>
 
+#if defined(_MSC_VER) && !defined(__clang__)
+
+/* MSVC OpenMP is limited to 2.0 – no nested levels API */
+
+#pragma message("Warning: using legacy OpenMP API (MSVC runtime lacks omp_get_max_active_levels)")
+
+static int ptw32_omp_get_max_active_levels(void)
+{
+    /* no nested parallelism info available → degrade gracefully */
+    return 1;
+}
+
+/* optional: map symbol */
+#define omp_get_max_active_levels ptw32_omp_get_max_active_levels
+
+#endif
+
 enum {
   Size = 10000
 };
