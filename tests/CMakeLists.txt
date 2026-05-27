@@ -6,15 +6,15 @@ function (PT4WCREATE_TEST TESTNAME)
   cmake_parse_arguments (PARSE_ARGV 1 PT4WCT "${OPTS}" "${OVA}" "${MVA}")
 
   foreach (SUFFIX ${SUFFIXES})
-    if(PTHREADS4W_BUILD_SHARED)
-      if(SUFFIX STREQUAL "CE")
-        set_source_files_properties(
-            ${PTHREADS4W_SOURCE_DIR}/tests/${TESTNAME}.c
-            ${PTHREADS4W_SOURCE_DIR}/tests/${PT4WCT_ADDITIONAL_SOURCE}
-            ${PTHREADS4W_SOURCE_DIR}/pthread.c
-          PROPERTIES LANGUAGE CXX)
+    if(SUFFIX STREQUAL "CE")
+      set_source_files_properties(
+          ${PTHREADS4W_SOURCE_DIR}/tests/${TESTNAME}.c
+          ${PTHREADS4W_SOURCE_DIR}/tests/${PT4WCT_ADDITIONAL_SOURCE}
+          ${PTHREADS4W_SOURCE_DIR}/pthread.c
+        PROPERTIES LANGUAGE CXX)
       endif()
 
+    if(PTHREADS4W_BUILD_SHARED)
       add_executable (pthreads4w${SUFFIX}-${TESTNAME}
         ${PTHREADS4W_SOURCE_DIR}/tests/${TESTNAME}.c
         ${PTHREADS4W_SOURCE_DIR}/tests/${PT4WCT_ADDITIONAL_SOURCE})
