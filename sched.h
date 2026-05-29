@@ -56,21 +56,21 @@
     typedef int pid_t;
 #endif
 
-#if __GNUC__ < 4
-/* GCC v4.0 and later, (as used by MinGW), allows us to repeat a
+#if !defined __GNUC__ || __GNUC__ < 4
+    /* GCC v4.0 and later, (as used by MinGW), allows us to repeat a
  * typedef, provided every duplicate is consistent; only set this
  * multiple definition guard when we cannot be certain that it is
  * permissable to repeat typedefs.
  */
-#define __have_typedef_pid_t  1
+#define __have_typedef_pid_t 1
 #endif
 #endif
 
-/* POSIX.1-1993 says that <sched.h> WILL expose all of <time.h>
+    /* POSIX.1-1993 says that <sched.h> WILL expose all of <time.h>
  */
 #undef __SCHED_H_SOURCED__
 #if _POSIX_C_SOURCE >= 200112L
-/* POSIX.1-2001 and later revises this to say only that it MAY do so;
+    /* POSIX.1-2001 and later revises this to say only that it MAY do so;
  * only struct timespec, and associated time_t are actually required,
  * so prefer to be selective; (MinGW.org's <time.h> offers an option
  * for selective #inclusion, when __SCHED_H_SOURCED__ is defined):
@@ -82,46 +82,41 @@
 #include <time.h>
 
 #if defined __MINGW64__ || _MSC_VER >= 1900
-/* These are known to define struct timespec, when <time.h> has been
+    /* These are known to define struct timespec, when <time.h> has been
  * #included, but may not, (probably don't), follow the convention of
  * defining __struct_timespec_defined, as adopted by MinGW.org; for
  * these cases, we unconditionally assume that struct timespec has
  * been defined, otherwise, if MinGW.org's criterion has not been
  * satisfied...
  */
-#elif ! defined __struct_timespec_defined
-#  ifndef _TIMESPEC_DEFINED
-#  define _TIMESPEC_DEFINED
+#elif !defined __struct_timespec_defined
+#ifndef _TIMESPEC_DEFINED
+#define _TIMESPEC_DEFINED
 struct timespec
 { /* ...we fall back on this explicit definition.
    */
   time_t	tv_sec;
   int		tv_nsec;
 };
-#  endif
+#endif
 #endif
 
-/*
+    /*
  * Microsoft VC++6.0 lacks these *_PTR types
  */
-#if defined(_MSC_VER) && _MSC_VER < 1300 && !defined (__PTW32_HAVE_DWORD_PTR)
-typedef unsigned long ULONG_PTR;
-typedef ULONG_PTR DWORD_PTR;
+#if defined(_MSC_VER) && _MSC_VER < 1300 && !defined(__PTW32_HAVE_DWORD_PTR)
+    typedef unsigned long ULONG_PTR;
+    typedef ULONG_PTR DWORD_PTR;
 #endif
 
-/* Thread scheduling policies */
+    /* Thread scheduling policies */
 
-enum
-{ SCHED_OTHER = 0,
-  SCHED_FIFO,
-  SCHED_RR,
-  SCHED_MIN   = SCHED_OTHER,
-  SCHED_MAX   = SCHED_RR
-};
+    enum { SCHED_OTHER = 0, SCHED_FIFO, SCHED_RR, SCHED_MIN = SCHED_OTHER, SCHED_MAX = SCHED_RR };
 
-struct sched_param
-{ int  sched_priority;
-};
+    struct sched_param
+    {
+        int sched_priority;
+    };
 
 /*
  * CPU affinity

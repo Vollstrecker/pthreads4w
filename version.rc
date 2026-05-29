@@ -43,25 +43,36 @@
 #if defined (__PTW32_RC_MSC)
 #  if defined (__PTW32_ARCHx64) || defined (__PTW32_ARCHX64) || defined (__PTW32_ARCHAMD64)
 #    if defined(__PTW32_CLEANUP_C)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVC2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadC3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C x64\0"
 #    elif defined(__PTW32_CLEANUP_CXX)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVCE2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadCE3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C++ x64\0"
 #    elif defined(__PTW32_CLEANUP_SEH)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVSE2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadSE3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C SEH x64\0"
 #    endif
 #  elif defined (__PTW32_ARCHx86) || defined (__PTW32_ARCHX86)
 #    if defined(__PTW32_CLEANUP_C)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVC2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadC3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C x86\0"
 #    elif defined(__PTW32_CLEANUP_CXX)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVCE2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadCE3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C++ x86\0"
 #    elif defined(__PTW32_CLEANUP_SEH)
-#      define  __PTW32_VERSIONINFO_NAME "pthreadVSE2.DLL\0"
+#      define __PTW32_VERSIONINFO_NAME "pthreadSE3.DLL\0"
 #      define  __PTW32_VERSIONINFO_DESCRIPTION "MS C SEH x86\0"
+#    endif
+#  elif defined(__PTW32_ARCHARM64)
+#    if defined(__PTW32_CLEANUP_C)
+#      define __PTW32_VERSIONINFO_NAME "pthreadC3.DLL\0"
+#      define __PTW32_VERSIONINFO_DESCRIPTION "MS C arm64\0"
+#    elif defined(__PTW32_CLEANUP_CXX)
+#      define __PTW32_VERSIONINFO_NAME "pthreadCE3.DLL\0"
+#      define __PTW32_VERSIONINFO_DESCRIPTION "MS C++ arm64\0"
+#    elif defined(__PTW32_CLEANUP_SEH)
+#      define __PTW32_VERSIONINFO_NAME "pthreadSE3.DLL\0"
+#      define __PTW32_VERSIONINFO_DESCRIPTION "MS C SEH arm64\0"
 #    endif
 #  endif
 #elif defined(__GNUC__)
@@ -71,10 +82,10 @@
 #    define  __PTW32_ARCH "x86 (mingw32)"
 #  endif
 #  if defined(__PTW32_CLEANUP_C)
-#    define  __PTW32_VERSIONINFO_NAME "pthreadGC2.DLL\0"
+#    define  __PTW32_VERSIONINFO_NAME "pthreadC3.DLL\0"
 #    define  __PTW32_VERSIONINFO_DESCRIPTION "GNU C "  __PTW32_ARCH "\0"
 #  elif defined(__PTW32_CLEANUP_CXX)
-#    define  __PTW32_VERSIONINFO_NAME "pthreadGCE2.DLL\0"
+#    define  __PTW32_VERSIONINFO_NAME "pthreadCE3.DLL\0"
 #    define  __PTW32_VERSIONINFO_DESCRIPTION "GNU C++ "  __PTW32_ARCH "\0"
 #  else
 #    error Resource compiler doesn't know which cleanup style you're using - see version.rc

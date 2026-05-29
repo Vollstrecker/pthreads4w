@@ -1,0 +1,72 @@
+cmake_minimum_required(VERSION 3.11...3.31)
+
+if(PTHREADS4W_BUILD_CE)
+  project(
+    pt4w_add_subdirectory_test
+    LANGUAGES CXX
+    VERSION @PTHREADS4W_VERSION@)
+
+  set(PTW32_TEST_SRC_FILE "${CMAKE_BINARY_DIR}/ptw32_test.cpp")
+else()
+  project(
+    pt4w_add_subdirectory_test
+    LANGUAGES C
+    VERSION @PTHREADS4W_VERSION@)
+
+  set(PTW32_TEST_SRC_FILE "${CMAKE_BINARY_DIR}/ptw32_test.c")
+endif()
+
+option(PTHREADS4W_BUILD_TESTING "" OFF)
+option(PTHREADS4W_BUILD_SHARED "" @PTHREADS4W_BUILD_SHARED@)
+option(PTHREADS4W_BUILD_STATIC "" @PTHREADS4W_BUILD_STATIC@)
+
+file(WRITE "${PTW32_TEST_SRC_FILE}" "
+#include <pthread.h>
+
+int main(void) {
+    pthread_mutex_t m;
+    pthread_mutex_init(&m, 0);
+    pthread_mutex_destroy(&m);
+    return 0;
+}
+")
+
+add_subdirectory(@PTHREADS4W_SOURCE_DIR@
+  ${CMAKE_CURRENT_BINARY_DIR}/pt4w)
+
+if(PTHREADS4W_BUILD_SHARED)
+  if(PTHREADS4W_BUILD_C)
+    add_executable(test_C ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_C Threads::Threads)
+
+    add_executable(test_CS ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_CS Threads::Shared)
+  endif()
+
+  if(PTHREADS4W_BUILD_CE)
+    add_executable(test_CE ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_CE Threads::CEShared)
+  endif()
+
+  if(PTHREADS4W_BUILD_SE)
+    add_executable(test_SE ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_SE Threads::SEShared)
+  endif()
+endif(PTHREADS4W_BUILD_SHARED)
+
+if(PTHREADS4W_BUILD_STATIC)
+  if(PTHREADS4W_BUILD_C)
+    add_executable(test_CStatic ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_CStatic Threads::Static)
+  endif()
+
+  if(PTHREADS4W_BUILD_CE)
+    add_executable(test_CEStatic ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_CEStatic Threads::CEStatic)
+  endif()
+
+  if(PTHREADS4W_BUILD_SE)
+    add_executable(test_SEStatic ${PTW32_TEST_SRC_FILE})
+    target_link_libraries(test_SEStatic Threads::SEStatic)
+  endif()
+endif(PTHREADS4W_BUILD_STATIC)

@@ -43,7 +43,7 @@
 int
 pthread_spin_trylock (pthread_spinlock_t * lock)
 {
-  register pthread_spinlock_t s;
+  pthread_spinlock_t s;
 
   if (NULL == lock || NULL == *lock)
     {

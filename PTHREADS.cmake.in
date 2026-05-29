@@ -1,5 +1,72 @@
 @PACKAGE_INIT@
 
-INCLUDE (${CMAKE_CURRENT_LIST_DIR}/PTHREADS4W.cmake)
-INCLUDE (CMakeFindDependencyMacro)
-ADD_LIBRARY (Threads::Shared ALIAS Threads::Threads)
+set(_pthreads4w_available_components)
+
+if(@PTHREADS4W_BUILD_C@)
+  if(@PTHREADS4W_BUILD_SHARED@)
+    list(APPEND _pthreads4w_available_components Shared)
+  endif()
+
+  if(@PTHREADS4W_BUILD_STATIC@)
+    list(APPEND _pthreads4w_available_components Static)
+  endif()
+endif()
+
+if(@PTHREADS4W_BUILD_CE@)
+  if(@PTHREADS4W_BUILD_SHARED@)
+    list(APPEND _pthreads4w_available_components CEShared)
+  endif()
+
+  if(@PTHREADS4W_BUILD_STATIC@)
+    list(APPEND _pthreads4w_available_components CEStatic)
+  endif()
+endif()
+
+if(@PTHREADS4W_BUILD_SE@)
+  if(@PTHREADS4W_BUILD_SHARED@)
+    list(APPEND _pthreads4w_available_components SEShared)
+  endif()
+
+  if(@PTHREADS4W_BUILD_STATIC@)
+    list(APPEND _pthreads4w_available_components SEStatic)
+  endif()
+endif()
+
+if(PTHREADS4W_FIND_COMPONENTS)
+  set(_valid_components
+    Shared
+    Static
+    CEShared
+    CEStatic
+    SEShared
+    SEStatic)
+
+  foreach(comp IN LISTS PTHREADS4W_FIND_COMPONENTS)
+    if(NOT comp IN_LIST _valid_components)
+      set(PTHREADS4W_FOUND FALSE)
+      set(PTHREADS4W_NOT_FOUND_MESSAGE
+        "Unknown component: ${comp}")
+      return()
+    endif()
+  endforeach()
+endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/PTHREADS4W.cmake)
+
+if(NOT PTHREADS4W_FIND_COMPONENTS)
+  set(PTHREADS4W_FOUND TRUE)
+else()
+  foreach(comp IN LISTS PTHREADS4W_FIND_COMPONENTS)
+    list(FIND _pthreads4w_available_components "${comp}" _idx)
+
+    if(_idx EQUAL -1)
+      set(PTHREADS4W_FOUND FALSE)
+      set(PTHREADS4W_NOT_FOUND_MESSAGE
+        "Component ${comp} is not available in this build")
+    endif()
+  endforeach()
+endif()
+
+if(TARGET Threads::Shared)
+  add_library(Threads::Threads ALIAS Threads::Shared)
+endif()

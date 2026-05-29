@@ -50,8 +50,8 @@ static pthread_mutexattr_t __ptw32_errorcheck_mutexattr = &__ptw32_errorcheck_mu
 INLINE int
 __ptw32_mutex_check_need_init (pthread_mutex_t * mutex)
 {
-  register int result = 0;
-  register pthread_mutex_t mtx;
+  int result = 0;
+  pthread_mutex_t mtx;
   __ptw32_mcs_local_node_t node;
 
   __ptw32_mcs_lock_acquire(&__ptw32_mutex_test_init_lock, &node);

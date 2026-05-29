@@ -1,0 +1,9 @@
+project (PTHREADS4W_C_SE-Tests
+  VERSION 3.0.3.0
+  LANGUAGES CXX)
+
+string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+set(SUFFIXES "CE")
+
+PT4W_make_tests()

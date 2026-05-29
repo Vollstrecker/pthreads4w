@@ -85,7 +85,7 @@
 # if defined(__GNUC__) && __GNUC__ < 3
 #   include <new.h>
 # else
-#   include <new>
+#   include <exception>
     using std::set_terminate;
 # endif
 #endif

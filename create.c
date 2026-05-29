@@ -88,7 +88,7 @@ pthread_create (pthread_t * tid,
   pthread_t thread;
   __ptw32_thread_t * tp;
   __ptw32_thread_t * sp;
-  register pthread_attr_t a;
+  pthread_attr_t a;
   HANDLE threadH = 0;
   int result = EAGAIN;
   int run =  __PTW32_TRUE;
