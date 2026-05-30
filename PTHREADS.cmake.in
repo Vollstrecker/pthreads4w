@@ -67,6 +67,6 @@ else()
   endforeach()
 endif()
 
-if(TARGET Threads::Shared)
+if(TARGET Threads::Shared AND NOT TARGET Threads::Threads)
   add_library(Threads::Threads ALIAS Threads::Shared)
 endif()
